@@ -6,6 +6,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import App from "./App";
+import { store } from './app/store'
+import { Provider } from 'react-redux'
 
 // You should replace this url with your own and put it into a .env file
 // See all subgraphs: https://thegraph.com/explorer/
@@ -14,8 +16,10 @@ const client = new ApolloClient({
 });
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>,
+  <Provider store={store}>
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
+  </Provider>,
   document.getElementById("root"),
 );
