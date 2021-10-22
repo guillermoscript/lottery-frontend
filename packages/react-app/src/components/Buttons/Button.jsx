@@ -1,6 +1,9 @@
-export default function Button({children}) {
+export default function Button({children,theme,onClickCallback, id}) {
+
+    let classTheme = `btnTheme${theme}`
+
     return (
-        <button>
+        <button className={classTheme} onClick={onClickCallback} id={id}>
             {children}
         </button>
     )

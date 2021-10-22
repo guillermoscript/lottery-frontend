@@ -24,7 +24,7 @@ export default function Head({children}) {
                 </div>
                 <div className={styles.headerLogin}>
                     <WalletButton provider={provider} loadWeb3Modal={loadWeb3Modal}/>
-                    <button onClick={() => logoutOfWeb3Modal()}>Disconect</button>
+                    <Button id="disconect" theme="dark" onClickCallback={() => logoutOfWeb3Modal()}>Disconect</Button>
                 </div>
             </div>
             :    
