@@ -8,6 +8,12 @@ export const Header = styled.header`
   align-items: center;
   justify-content: flex-end;
   color: white;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 `;
 
 export const Body = styled.div`

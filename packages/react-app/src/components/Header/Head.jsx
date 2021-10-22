@@ -5,6 +5,7 @@ import Button from "../Buttons/Button";
 import WalletButton from '../Buttons/WalletButton'
 import Network from '../Header/Network';
 import WalletBalance from "./WalletBalance";
+import styles from './header.module.css'
 
 
 export default function Head({children}) {
@@ -14,22 +15,24 @@ export default function Head({children}) {
 
     return (
         <Header>
-            <header>
-                {children}
-                { isConnected ? 
-                <div>
+            {children}
+            { isConnected ? 
+            <div className={styles.headerWrapper}>
+                <div className={styles}>
                     <Network network={networkName} />
                     <WalletBalance />
-                    <WalletButton />
+                </div>
+                <div className={styles.headerLogin}>
+                    <WalletButton provider={provider} loadWeb3Modal={loadWeb3Modal}/>
                     <button onClick={() => logoutOfWeb3Modal()}>Disconect</button>
                 </div>
-                :    
-                <div>
-                    <h3>No Network</h3>
-                    <WalletButton />
-                </div>
-                }
-            </header>
+            </div>
+            :    
+            <div className={styles.headerWrapper}>
+                <h3>No Network</h3>
+                <WalletButton provider={provider} loadWeb3Modal={loadWeb3Modal}/>
+            </div>
+            }
         </Header>
     )
 }

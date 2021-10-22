@@ -4,9 +4,9 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Button } from "../index";
 import { addAccounts } from '../../features/login/wallet'
 import { ethers } from "ethers";
-export default function WalletButton() {
+export default function WalletButton({provider,loadWeb3Modal}) {
 
-    const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
+    // const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
     const [account, setAccount] = useState("");
     const [rendered, setRendered] = useState("");
     const emitEvent = useDispatch()
