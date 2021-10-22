@@ -42,18 +42,16 @@ function App() {
         </Head>
         <Body>
           <Image src={logo} alt="react-logo" />
-          <p>
-            Edit <code>packages/react-app/src/App.js</code> and save to reload.
-          </p>
+          
           {/* Remove the "hidden" prop and open the JavaScript console in the browser to see what this function does */}
-          <Button hidden onClick={() => readOnChainData()}>
+          {/* <Button hidden onClick={() => readOnChainData()}>
             Read On-Chain Balance
           </Button>
           <Link href="https://ethereum.org/developers/#getting-started" style={{ marginTop: "8px" }}>
             Learn Ethereum
           </Link>
           <Link href="https://reactjs.org">Learn React</Link>
-          <Link href="https://thegraph.com/docs/quick-start">Learn The Graph</Link>
+          <Link href="https://thegraph.com/docs/quick-start">Learn The Graph</Link> */}
         </Body>
       </div>
     </Router>
