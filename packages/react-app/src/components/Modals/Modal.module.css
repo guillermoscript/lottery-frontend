@@ -1,0 +1,65 @@
+.modalWrapper {
+    width: 100%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 2;
+    align-items: center;
+}
+
+.modalContent {
+    background-color: rgb(243, 243, 243);
+    width: 40%;
+    z-index: 2;
+    margin: 2em 0;
+    border-radius: 10px;
+    padding: 1em .7em;
+    max-height: 420px;
+    height: auto;
+    min-width: 35%;
+    max-width: 45%;
+    position: relative;
+    /* min-height: 50%; */
+    overflow: auto;
+    backdrop-filter: blur(3px) saturate(200%);
+    -webkit-backdrop-filter: blur(3px) saturate(200%);
+    background-color: rgba(17, 25, 40, 0.64);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+.headingWrapper {
+    -moz-box-align: center;
+    align-items: center;
+    flex: 1 1 0%;
+}
+
+.modalOverlay {
+    background: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+}
+
+.modalCloseWrapper button {
+    padding: 10px 15px;
+    margin: 0;
+    color: white;
+    border-radius: 37px;
+    background: #0f1724;
+    box-shadow: 7px 7px 15px #0a0f17, -7px -7px 15px #141f31;
+}
+
+.modalCloseWrapper {
+    /* position: absolute; */
+    top: 15px;
+    flex: 1 1 0%;
+    display: flex;
+    align-items: center;
+}

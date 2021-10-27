@@ -8,7 +8,8 @@ import WalletBalance from "./WalletBalance";
 import styles from './header.module.css'
 
 
-export default function Head({children}) {
+// export default function Head({children, provider, loadWeb3Modal, logoutOfWeb3Modal}) {
+export default function Head({ children }) {
     let isConnected = useSelector(state => state.accountReducer.isConnected)
     let networkName = useSelector(state => state.accountReducer.networkName)
     const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
@@ -16,22 +17,22 @@ export default function Head({children}) {
     return (
         <Header>
             {children}
-            { isConnected ? 
-            <div className={styles.headerWrapper}>
-                <div className={styles}>
-                    <Network network={networkName} />
-                    <WalletBalance />
+            {isConnected ?
+                <div className={styles.headerWrapper}>
+                    <div className={styles}>
+                        <Network network={networkName} />
+                        <WalletBalance />
+                    </div>
+                    <div className={styles.headerLogin}>
+                        <WalletButton provider={provider} loadWeb3Modal={loadWeb3Modal} />
+                        <Button id="disconect" theme="dark" onClickCallback={() => logoutOfWeb3Modal()}>Disconect</Button>
+                    </div>
                 </div>
-                <div className={styles.headerLogin}>
-                    <WalletButton provider={provider} loadWeb3Modal={loadWeb3Modal}/>
-                    <Button id="disconect" theme="dark" onClickCallback={() => logoutOfWeb3Modal()}>Disconect</Button>
+                :
+                <div className={styles.headerWrapper}>
+                    <h3>No Network</h3>
+                    <WalletButton provider={provider} loadWeb3Modal={loadWeb3Modal} />
                 </div>
-            </div>
-            :    
-            <div className={styles.headerWrapper}>
-                <h3>No Network</h3>
-                <WalletButton provider={provider} loadWeb3Modal={loadWeb3Modal}/>
-            </div>
             }
         </Header>
     )

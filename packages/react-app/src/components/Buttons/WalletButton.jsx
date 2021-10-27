@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import useWeb3Modal from "../../hooks/useWeb3Modal";
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Button } from "../index";
 import { addAccounts } from '../../features/login/wallet'
 import { ethers } from "ethers";
+
+// wallet Button for the user to connect to eth
 export default function WalletButton({provider,loadWeb3Modal}) {
 
     // const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
@@ -12,6 +13,7 @@ export default function WalletButton({provider,loadWeb3Modal}) {
     const emitEvent = useDispatch()
 
     useEffect(() => {
+        // moved this from app to this component because is here were the connect logic should be
         async function fetchAccount() {
             try {
                 if (!provider) {
@@ -23,13 +25,13 @@ export default function WalletButton({provider,loadWeb3Modal}) {
 
                 // Resolve the ENS name for the first account.
                 const name = await provider.lookupAddress(accounts[0]);
-
                 const amountInHex = await provider.getBalance(accounts[0]);
-
                 const inDecimals = ethers.utils.formatEther(amountInHex)
 
                 // Render either the ENS name or the shortened account address.
                 if (name) {
+
+                    // emit event with the data of account to the store
                     setRendered(name);
                     emitEvent(addAccounts({
                         isConnected: true,
@@ -38,15 +40,19 @@ export default function WalletButton({provider,loadWeb3Modal}) {
                         accountBalanceEth: inDecimals
                     }))
                 } else {
+
+                    // emit event with the data of account to the store
                     setRendered(account.substring(0, 6) + "..." + account.substring(36));
                     emitEvent(addAccounts({
                         isConnected: true,
-                        account: account.substring(0, 6) + "..." + account.substring(36),
+                        account: account,
                         networkName: provider._network.name,
                         accountBalanceEth: inDecimals
                     }))
                 }
             } catch (err) {
+
+                // emit event with the data of account to the store
                 setAccount("");
                 setRendered("");
                 console.error(err);
@@ -64,6 +70,7 @@ export default function WalletButton({provider,loadWeb3Modal}) {
     return (
         <Button
             onClick={() => {
+                // if no provider then load to connect
                 if (!provider) {
                     loadWeb3Modal();
                 }

@@ -1,0 +1,26 @@
+.btn {
+    border: none;
+    border-radius: 8px;
+    color: #282c34;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    margin: 0px 20px;
+    padding: 12px 24px;
+}
+
+.btnLight {
+    background-color: #fff;
+}
+
+.outBtn {
+    background: #f3f3f3;
+    box-shadow: 6px 6px 12px #b6b6b6, -6px -6px 12px #ffffff;
+}
+
+.btnDark {
+    border-radius: 37px;
+    background: #0f1724;
+    box-shadow: 7px 7px 15px #0a0f17, -7px -7px 15px #141f31;
+}

@@ -1,0 +1,37 @@
+.inp {
+    border: 0px;
+    padding: 1em 2em;
+    /* margin: 0 1em; */
+}
+
+.inpWrite {
+    border-radius: 50px;
+    color: #fff;
+    border-radius: 37px;
+    background: #0f1724;
+    background-color: rgb(15, 23, 36);
+    box-shadow: inset 7px 7px 15px #0a0f17, inset -7px -7px 15px #141f31;
+    backdrop-filter: blur(0px) saturate(200%);
+    -webkit-backdrop-filter: blur(0px) saturate(200%);
+    background-color: rgba(17, 25, 40, 0.02);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+.submitBtn {
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.lightBtn {
+    background: #f3f3f3;
+    box-shadow:  6px 6px 12px #b6b6b6,
+                -6px -6px 12px #ffffff;
+}
+
+.darkBtn {
+    color: white;
+    border-radius: 37px;
+    background: #0f1724;
+    box-shadow: 7px 7px 15px #0a0f17, -7px -7px 15px #141f31;
+}
