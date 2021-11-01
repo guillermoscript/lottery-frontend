@@ -30,7 +30,7 @@
     -webkit-backdrop-filter: blur(3px) saturate(200%);
     background-color: rgba(17, 25, 40, 0.64);
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.125);
+    border: 2px solid rgba(255, 255, 255, 0.125);
 }
 
 .headingWrapper {
@@ -62,4 +62,62 @@
     flex: 1 1 0%;
     display: flex;
     align-items: center;
+}
+/* 
+.w {
+    height: 100% !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.pipe {
+    width: 6px !important;
+    height: 100% !important;
+    background-color: #2125292E !important;
+}
+
+.circleGray,
+.lightRed,
+.centerRed {
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.circleGray {
+    background: #F5D9D9;
+    width: 100px;
+    height: 100px;
+}
+
+.lightRed {
+    background: #CC4040;
+    width: 75px;
+    height: 75px;
+}
+
+.centerRed {
+    background: #BB0000;
+    width: 50px;
+    height: 50px;
+} */
+
+@media only screen and (max-width: 1024px) {
+    .modalContent {
+        width: 60%;
+        max-width: 75%;
+    }
+}
+
+#section-29-62940 {
+    margin: 0;
+}
+
+@media only screen and (max-width: 767px) {
+    .modalContent {
+        width: 60%;
+        max-width: 75%;
+    }
 }

@@ -6,26 +6,34 @@ import WalletButton from '../Buttons/WalletButton'
 import Network from '../Header/Network';
 import WalletBalance from "./WalletBalance";
 import styles from './header.module.css'
-
+import { ProviederContext } from "../../features/context/provider";
+import { useContext } from "react";
+import btnStyle from "../Buttons/Button.module.css"
 
 // export default function Head({children, provider, loadWeb3Modal, logoutOfWeb3Modal}) {
 export default function Head({ children }) {
-    let isConnected = useSelector(state => state.accountReducer.isConnected)
-    let networkName = useSelector(state => state.accountReducer.networkName)
-    const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
+    const isConnected = useSelector(state => state.accountReducer.isConnected)
+    const networkName = useSelector(state => state.accountReducer.networkName)
+    const [provider,loadWeb3Modal, logoutOfWeb3Modal] = useContext(ProviederContext)
+    // const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
 
     return (
         <Header>
             {children}
             {isConnected ?
                 <div className={styles.headerWrapper}>
-                    <div className={styles}>
+                    <div>
                         <Network network={networkName} />
                         <WalletBalance />
                     </div>
                     <div className={styles.headerLogin}>
                         <WalletButton provider={provider} loadWeb3Modal={loadWeb3Modal} />
-                        <Button id="disconect" theme="dark" onClickCallback={() => logoutOfWeb3Modal()}>Disconect</Button>
+                        <Button id="disconect" className={`${btnStyle.walletButton} ${btnStyle.borderRed}`} theme="dark"
+                            onClickCallback={() => logoutOfWeb3Modal()}>
+                            Disconect
+
+                <div className="line2"></div>
+                        </Button>
                     </div>
                 </div>
                 :

@@ -21,6 +21,23 @@ export async function getBalanceOfGuilleCoin(token, account) {
     return tokenBalance.toString()
 }
 
+
+export async function getTokenName(token) {
+    const tokenName = await token.name()
+    return tokenName
+}
+
+export async function getTokenSymbol(token) {
+    const tokenSymbol = await token.symbol()
+    return tokenSymbol
+}
+
+export async function getWinningNumber(lottery) {
+    const winningNumber = await lottery.winningNumber()
+    return winningNumber.toString()
+}
+
+
 export async function getEntryFee(lottery) {
     const entryFee = await lottery.entryFee()
     return entryFee.toString()

@@ -14,6 +14,84 @@
     background-color: #fff;
 }
 
+.btnCristal {
+    background-color: transparent;
+    color: white;   
+    cursor: pointer;
+    border-radius: 30px;
+    padding: 12px;
+    margin: 0 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 23px 23px 13px #292e3000, inset -23px -23px 13px #333a3c1c;
+
+    /* box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); */
+    animation: moveInBottom 3s ease-out;
+    animation-fill-mode: backwards;
+}
+
+
+@keyframes moveInBottom {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
+.walletButton {
+    cursor: pointer;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.05);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    color: white;
+    letter-spacing: 1px;
+    position: relative;
+    color: white;
+    padding: 12px 24px;
+}
+
+
+.btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+.borderLime {
+    border-bottom: 1px solid rgba(50, 216, 0, 0.4);
+}
+
+.borderRed {
+    border-bottom: 1px solid #d9001485;
+}
+
+.walletButton:hover {
+    letter-spacing: 3px;
+}   
+
+.walletButton::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-radius:0 30px 30px;
+    height: 100%;
+    background: linear-gradient(to left, rgba(255,255,255,0.15), transparent);
+    /* transform:  skewX(45deg) translateX(0); */
+}
+
+.walletButton:hover ::before {
+    /* transform:  skew(45deg) translateX(200%); */
+}
+
 .outBtn {
     background: #f3f3f3;
     box-shadow: 6px 6px 12px #b6b6b6, -6px -6px 12px #ffffff;

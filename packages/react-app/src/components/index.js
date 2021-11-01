@@ -28,7 +28,7 @@ export const Body = styled.div`
 `;
 
 export const Image = styled.img`
-  height: 40vmin;
+  height: 25vmin;
   margin-bottom: 16px;
   pointer-events: none;
 `;
@@ -41,8 +41,7 @@ export const Link = styled.a.attrs({
   margin-top: 10px;
 `;
 
-export const Button = styled.button`
-  background-color: white;
+export const Button = styled.button`  
   border: none;
   border-radius: 8px;
   color: #282c34;
@@ -53,6 +52,15 @@ export const Button = styled.button`
   margin: 0px 20px;
   padding: 12px 24px;
 
+  background-color: rgba(0, 0, 0, 0.05);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  color: white;
+  letter-spacing: 1px;
+  position: relative;
+
+  border-bottom: 1px solid rgba(50, 216, 0, 0.4);
   ${props => props.hidden && "hidden"} :focus {
     border: none;
     outline: none;

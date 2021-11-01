@@ -4,8 +4,10 @@ import { Button } from "../index";
 import { addAccounts } from '../../features/login/wallet'
 import { ethers } from "ethers";
 
+
+import btnStyle from "./Button.module.css"
 // wallet Button for the user to connect to eth
-export default function WalletButton({provider,loadWeb3Modal}) {
+export default function WalletButton({ provider, loadWeb3Modal }) {
 
     // const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
     const [account, setAccount] = useState("");
@@ -40,7 +42,6 @@ export default function WalletButton({provider,loadWeb3Modal}) {
                         accountBalanceEth: inDecimals
                     }))
                 } else {
-
                     // emit event with the data of account to the store
                     setRendered(account.substring(0, 6) + "..." + account.substring(36));
                     emitEvent(addAccounts({
@@ -68,7 +69,9 @@ export default function WalletButton({provider,loadWeb3Modal}) {
     }, [account, provider, setAccount, setRendered]);
 
     return (
+
         <Button
+            className={`${btnStyle.walletButton} ${btnStyle.borderLime}`}
             onClick={() => {
                 // if no provider then load to connect
                 if (!provider) {
@@ -76,10 +79,11 @@ export default function WalletButton({provider,loadWeb3Modal}) {
                 }
             }}
         >
-            {rendered === "" && "Connect Wallet"}
-            {rendered !== "" && rendered}
+            {rendered === "" ? "Connect Wallet" : rendered}
             {console.log(provider)}
-          
+
+            <div className="line"></div>
         </Button>
+
     );
 }

@@ -1,6 +1,8 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import retunrErrorMessage from "../../utils/errorObjMessage"
+import { getTokenName } from "../../utils/function"
+import textInDifferntLanguages from "../../utils/languages"
 import Form from "../Forms/Form"
 import Input from "../Inputs/Input"
 import Label from "../Label/Label"
@@ -10,12 +12,23 @@ import TooltipStyle from "../Tooltip/Tooltip.module.css"
 export default function ContainerModal({ inpStyle, lablStyle, contStyle, lottery, guilleCoin, provider, }) {
 
     const [lotteryNumbers, setLotteryNumbers] = useState('');
+    const [tokenName, setTokenName] = useState('')
     const [priceOfLotteryNumber, setPriceOfLotteryNumber] = useState(10);
     const [totalOfLotteryNumber, setTotalOfLotteryNumber] = useState(0);
     const [errorMessage, setErrorMessage] = useState('')
+    
 
     // redux
     const tokenEntryFee = useSelector(state => state.lotteryReducer.entryFee)
+    const language = useSelector(state => state.languageReducer.language)
+
+    // helpers
+    const text = textInDifferntLanguages()
+
+
+    useEffect(() => {
+        getTokenName(guilleCoin).then((name) => setTokenName(name))
+    },[])
 
     function handleChange(e) {
         let inputValue = e.target.value;
@@ -80,10 +93,10 @@ export default function ContainerModal({ inpStyle, lablStyle, contStyle, lottery
                 <div className="flx flxCol mrY10 fullW">
                     <Label htmlFor="lotteryNumber"
                         className={`${lablStyle.labellLigth} ${lablStyle.labell}`}>
-                        Numero de Loteria
+                        {text.lotteryNumber[language]}
                         <Tooltip
                             iconClassName={TooltipStyle.tooltip}
-                            toolClassName={TooltipStyle.tooltiptext}>Separa en "," los numero para comprar mas Tickets </Tooltip> </Label>
+                            toolClassName={TooltipStyle.tooltiptext}>{text.instructionToolTip[language]} </Tooltip> </Label>
                     <Input
                         id="lotteryNumber"
                         className={`${inpStyle.inpWrite} ${inpStyle.inp}`}
@@ -93,18 +106,18 @@ export default function ContainerModal({ inpStyle, lablStyle, contStyle, lottery
                 </div>
 
                 <div className="flx mrY10 flxSpcBtw fullW">
-                    <p className="">Costo de ticket:</p>
-                    <p className=""> {tokenEntryFee} GuilleCoins </p>
+                    <p className="">{text.ticketPrice[language]}:</p>
+                    <p className=""> {tokenEntryFee} {tokenName} </p>
                 </div>
 
                 <div className="flx mrY10 flxSpcBtw fullW">
-                    <p className="">Total de ticket:</p>
+                    <p className="">{text.totalTicket[language]}:</p>
                     <p className=""> {totalOfLotteryNumber} Tickets</p>
                 </div>
 
                 <div className="flx mrY10 flxSpcBtw fullW">
                     <p className="">Total:</p>
-                    <p className=""> {priceOfLotteryNumber} GuilleCoins </p>
+                    <p className=""> {priceOfLotteryNumber} {tokenName} </p>
                 </div>
 
                 <div className="flx mrY10 flxSpcBtw fullW">
@@ -114,7 +127,7 @@ export default function ContainerModal({ inpStyle, lablStyle, contStyle, lottery
                 <Input
                     id="submitNumber"
                     className={`${inpStyle.submitBtn} ${inpStyle.darkBtn} ${inpStyle.inp}`}
-                    value="Participar"
+                    value={text.joinLottery[language]}
                     onClickCallback={e => {
                         e.preventDefault()
                         handleSubmit()

@@ -2,12 +2,19 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    padding: 1em 4em;
+    padding: 0.3em 4em;
+    align-items: center;
 }
 
 .headerNetwork {
 
 }
+
+header h3 {
+    margin: 0 0 10px;
+}
+
+ 
 
 .headerLogin {
     display: flex;
