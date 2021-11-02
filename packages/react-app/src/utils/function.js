@@ -21,6 +21,11 @@ export async function getBalanceOfGuilleCoin(token, account) {
     return tokenBalance.toString()
 }
 
+export function contractSigner(provider,contract) {
+    const signer = provider.getSigner()
+    const contractSigner = contract.connect(signer)
+    return contractSigner
+}
 
 export async function getTokenName(token) {
     const tokenName = await token.name()

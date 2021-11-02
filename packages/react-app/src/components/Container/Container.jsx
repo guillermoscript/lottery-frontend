@@ -14,7 +14,7 @@ import { Contract } from "@ethersproject/contracts";
 import lablStyle from "../Label/Label.module.css"
 import { useDispatch, useSelector } from "react-redux"
 import useWeb3Modal from "../../hooks/useWeb3Modal"
-import { approveSpendingOfToken, checkAllowanceOfToken, getBalanceOfGuilleCoin, getEntryFee, getLotteryState, getWinningNumber } from "../../utils/function"
+import { approveSpendingOfToken, checkAllowanceOfToken, contractSigner, getBalanceOfGuilleCoin, getEntryFee, getLotteryState, getWinningNumber } from "../../utils/function"
 import { addBalanceOfToken } from "../../features/token/token"
 import { addEntryFee } from "../../features/lottery/lottery"
 import { ProviederContext } from "../../features/context/provider"
@@ -28,7 +28,6 @@ import InputLabelPair from "../Forms/InputLabelPair"
 export default function Container() {
 
     // state variables
-    // const [provider] = useWeb3Modal();
     const [provider] = useContext(ProviederContext)
     const [viewSubmitTicket, setViewSubmitTicket] = useState(false);
     const [viewBalanceOf, setViewBalanceOf] = useState(false);
@@ -39,7 +38,6 @@ export default function Container() {
     const [winningNumber, setWinningNumber] = useState(false);
     const [chooseWinner, setChooseWinner] = useState('');
     const [viewOfRollback, setViewOfRollback] = useState(false)
-    const [selectedWinningNumber, setSelectedWinningNumber] = useState(false)
     const [entryFee, setEntryFee] = useState('')
     const [ownerFee, setOwnerFee] = useState('')
     const [newTokenAddress, setNewTokenAddress] = useState('')
@@ -50,7 +48,6 @@ export default function Container() {
     const isConnected = useSelector(state => state.accountReducer.isConnected)
     const account = useSelector(state => state.accountReducer.account)
     const language = useSelector(state => state.languageReducer.language)
-    const userBalanceOfToken = useSelector(state => state.tokenReducer.balanceOf)
     const emitEvent = useDispatch()
 
     // contracts
@@ -80,8 +77,6 @@ export default function Container() {
         const entryFee = await getEntryFee(lottery)
         // set to store the entry fee
         emitEvent(addEntryFee({ entryFee }))
-        // console.log(Number(allowance) < Number(entryFee),entryFee,allowance, 'Xd');
-        // aprove spendign of your token 
         if (Number(allowance) < Number(entryFee)) {
             approveSpendingOfToken(provider, guilleCoin, addresses.lottery)
         }
@@ -90,28 +85,22 @@ export default function Container() {
     }
 
     async function changeStateOfLottery() {
+
+        // this functions are from utili made of posible cases of states
+        const casesOfState = {
+            0: lotterySigner => lotterySigner._changeState(1).catch(err => setErrorMessage(err.message)),
+            1: lotterySigner => lotterySigner._changeState(2).catch(err => setErrorMessage(err.message)),
+            2: lotterySigner => lotterySigner._changeState(0).catch(err => setErrorMessage(err.message)),
+        }
         // only the owner can change the state 
         // even if you click this without having the private key the Contract will not allow you, the error handlign is not done of course 
-        const signer = provider.getSigner()
-        const lotterySigner = lottery.connect(signer)
-        // let lotteryState = await Number(getLotteryState(lottery))
-        let lotteryState = await (getLotteryState(lottery))
-        console.log(typeof lotteryState);
-        console.log(lotteryState);
-        console.log(lotteryState);
-        if (lotteryState === '2') {
-            const stateOfLottery = await lotterySigner._changeState(0)
-            console.log('espera a la proxima');
-            console.log(await getLotteryState(lottery));
-        } else if (lotteryState === '1') {
-            console.log(lotteryState);
-            const stateOfLottery = await lotterySigner._changeState(2)
-            console.log(stateOfLottery);
-        } else if (lotteryState === '0') {
-            console.log(lotteryState);
-            const stateOfLottery = await lotterySigner._changeState(1)
-            console.log(stateOfLottery);
-        }
+        const lotterySigner = contractSigner(provider,lottery)
+        const lotteryState = await getLotteryState(lottery)
+
+        // get the state and depending on the state call the function will change the state acording to the case
+        const newState = await casesOfState[lotteryState](lotterySigner)
+        console.log(newState);
+
     }
 
     function setStateOfViewToTrue(state) {
@@ -137,24 +126,22 @@ export default function Container() {
 
     function handleChange(e) {
         let inputValue = e.target.value;
-        if (/^[0-9]*$/ig.test(inputValue) && (inputValue.length > 0 && inputValue.length < 5) || inputValue === '') {
+        if ((/^[0-9]*$/ig.test(inputValue) && (inputValue.length > 0 && inputValue.length < 5)) || inputValue === '') {
             setChooseWinner(inputValue)
         }
     }
 
     async function selectWinnerNumber() {
-        const signer = provider.getSigner()
-        const lotterySigner = lottery.connect(signer)
+        const lotterySigner = contractSigner(provider,lottery)
         // same as above only owner can change
-        const winningNumber = await lotterySigner.selectWinner(chooseWinner)
+        const winningNumber = await lotterySigner.selectWinner(chooseWinner).catch( err => setErrorMessage(err))
         console.log(winningNumber);
     }
 
     async function roolOver() {
-        const signer = provider.getSigner()
-        const lotterySigner = lottery.connect(signer)
+        const lotterySigner = contractSigner(provider,lottery)
         // same as above only owner can change
-        const newLottery = await lotterySigner.roolOver(entryFee, ownerFee, newTokenAddress)
+        const newLottery = await lotterySigner.roolOver(entryFee, ownerFee, newTokenAddress).catch( err => setErrorMessage(err))
         console.log(newLottery);
     }
 
