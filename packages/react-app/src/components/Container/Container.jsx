@@ -62,9 +62,8 @@ export default function Container() {
         async function getOwnerOfLottery() {
             if (!provider) return
             // idk if i have to connect every time or just one and export that from file to file
-            const signer = provider.getSigner()
-            const loterrySigner = lottery.connect(signer)
-            const owner = await loterrySigner.owner()
+            const lotterySigner = contractSigner(provider,lottery)
+            const owner = await lotterySigner.owner()
             setOwner(owner)
         }
         getOwnerOfLottery()
