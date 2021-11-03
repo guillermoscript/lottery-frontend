@@ -13,7 +13,6 @@ import ContainerModal from "./ContainerModal"
 import { Contract } from "@ethersproject/contracts";
 import lablStyle from "../Label/Label.module.css"
 import { useDispatch, useSelector } from "react-redux"
-import useWeb3Modal from "../../hooks/useWeb3Modal"
 import { approveSpendingOfToken, checkAllowanceOfToken, contractSigner, getBalanceOfGuilleCoin, getEntryFee, getLotteryState, getWinningNumber } from "../../utils/function"
 import { addBalanceOfToken } from "../../features/token/token"
 import { addEntryFee } from "../../features/lottery/lottery"
@@ -27,22 +26,24 @@ import InputLabelPair from "../Forms/InputLabelPair"
 
 export default function Container() {
 
+    const viewType = Object.freeze({
+        viewSubmitTickets: "viewSubmitTickets",
+        viewBalanceOf: "viewBalanceOf",
+        viewOfWinner: "viewOfWinner",
+        viewModalToChooseWinner: "viewModalToChooseWinner",
+        viewOfRollback: "viewOfRollback",
+    })
     // state variables
     const [provider] = useContext(ProviederContext)
-    const [viewSubmitTicket, setViewSubmitTicket] = useState(false);
-    const [viewBalanceOf, setViewBalanceOf] = useState(false);
+    const [viewOfModal, setViewOfModal] = useState('')
     const [owner, setOwner] = useState(null);
     const [balanceOf, setBalanceOf] = useState('');
-    const [viewOfWinner, setViewOfWinner] = useState(false);
-    const [viewModalToSelectWinner, setViewModalToSelectWinner] = useState(false);
     const [winningNumber, setWinningNumber] = useState(false);
     const [chooseWinner, setChooseWinner] = useState('');
-    const [viewOfRollback, setViewOfRollback] = useState(false)
     const [entryFee, setEntryFee] = useState('')
     const [ownerFee, setOwnerFee] = useState('')
     const [newTokenAddress, setNewTokenAddress] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
-
 
     // redux variable 
     const isConnected = useSelector(state => state.accountReducer.isConnected)
@@ -62,7 +63,7 @@ export default function Container() {
         async function getOwnerOfLottery() {
             if (!provider) return
             // idk if i have to connect every time or just one and export that from file to file
-            const lotterySigner = contractSigner(provider,lottery)
+            const lotterySigner = contractSigner(provider, lottery)
             const owner = await lotterySigner.owner()
             setOwner(owner)
         }
@@ -70,7 +71,6 @@ export default function Container() {
     }, [account])
 
     async function handleTicketBuy() {
-
         // this functions are from utili made
         const allowance = await checkAllowanceOfToken(guilleCoin, account, addresses.lottery)
         const entryFee = await getEntryFee(lottery)
@@ -80,7 +80,7 @@ export default function Container() {
             approveSpendingOfToken(provider, guilleCoin, addresses.lottery)
         }
         // let the modal show
-        setViewSubmitTicket(true)
+        setViewOfModal(viewType.viewSubmitTickets)
     }
 
     async function changeStateOfLottery() {
@@ -93,21 +93,20 @@ export default function Container() {
         }
         // only the owner can change the state 
         // even if you click this without having the private key the Contract will not allow you, the error handlign is not done of course 
-        const lotterySigner = contractSigner(provider,lottery)
+        const lotterySigner = contractSigner(provider, lottery)
         const lotteryState = await getLotteryState(lottery)
 
         // get the state and depending on the state call the function will change the state acording to the case
         const newState = await casesOfState[lotteryState](lotterySigner)
         console.log(newState);
-
     }
 
-    function setStateOfViewToTrue(state) {
-        return () => state(true)
+    function setStateOfViewToTrue(setState, state) {
+        return () => setState(state)
     }
 
-    function generalHandleModalClik(state, callback) {
-        return () => (state(true), callback())
+    function generalHandleModalClik(setState, state, callback) {
+        return () => (setState(state), callback())
     }
 
     async function handleClickOfBalance() {
@@ -117,7 +116,6 @@ export default function Container() {
     }
 
     async function hanldeViewOfWinnignNumber() {
-        setViewOfWinner(true)
         const number = await getWinningNumber(lottery)
         setWinningNumber(number)
         console.log(winningNumber);
@@ -131,16 +129,16 @@ export default function Container() {
     }
 
     async function selectWinnerNumber() {
-        const lotterySigner = contractSigner(provider,lottery)
+        const lotterySigner = contractSigner(provider, lottery)
         // same as above only owner can change
-        const winningNumber = await lotterySigner.selectWinner(chooseWinner).catch( err => setErrorMessage(err))
+        const winningNumber = await lotterySigner.selectWinner(chooseWinner).catch(err => setErrorMessage(err))
         console.log(winningNumber);
     }
 
     async function roolOver() {
-        const lotterySigner = contractSigner(provider,lottery)
+        const lotterySigner = contractSigner(provider, lottery)
         // same as above only owner can change
-        const newLottery = await lotterySigner.roolOver(entryFee, ownerFee, newTokenAddress).catch( err => setErrorMessage(err))
+        const newLottery = await lotterySigner.roolOver(entryFee, ownerFee, newTokenAddress).catch(err => setErrorMessage(err))
         console.log(newLottery);
     }
 
@@ -172,7 +170,7 @@ export default function Container() {
         heading: <h2 className="heading2">{text.yourBalance[language]}</h2>,
     }
 
-    function returnModalComponent(state, headingText, children) {
+    function returnModalComponent(setState, state, headingText, children) {
         return <Modal
             modalContent={modal.modalContent}
             modalWrapper={modal.modalWrapper}
@@ -180,7 +178,7 @@ export default function Container() {
             modalOverlay={modal.modalOverlay}
             headingWrapper={modal.headingWrapper}
             closingClasssName={modal.closingClasssName}
-            closingAction={() => state(false)}
+            closingAction={() => setState(state)}
             heading={<h2 className="heading2">{headingText}</h2>}
         >
             {children}
@@ -188,13 +186,11 @@ export default function Container() {
     }
 
     return (
-
         <div className={`${styles.container} ${styles.containerGrid} `}>
-
 
             <Button id="btn1"
                 className={`${btnStyle.btnCristal} ${btnStyle.btn}`}
-                onClickCallback={generalHandleModalClik(setViewBalanceOf, handleClickOfBalance)}
+                onClickCallback={generalHandleModalClik(setViewOfModal, viewType.viewBalanceOf, handleClickOfBalance)}
             >
                 {text.viewBalance[language]}
             </Button>
@@ -208,26 +204,28 @@ export default function Container() {
 
             <Button id="btn3"
                 className={`${btnStyle.btnCristal} ${btnStyle.btn}`}
-                onClickCallback={hanldeViewOfWinnignNumber}
+                onClickCallback={generalHandleModalClik(setViewOfModal, viewType.viewOfWinner, hanldeViewOfWinnignNumber)}
             >
                 {text.viewWinner[language]}
             </Button>
 
             {account === owner &&
                 <OwnerContainer
-                    viewModalToChooseWinner={setStateOfViewToTrue(setViewModalToSelectWinner)}
+                    viewModalToChooseWinner={setStateOfViewToTrue(setViewOfModal, viewType.viewModalToChooseWinner)}
                     btnStyle={btnStyle}
                     text={text}
-                    viewModalToRollback={setStateOfViewToTrue(setViewOfRollback)}
+                    viewModalToRollback={setStateOfViewToTrue(setViewOfModal, viewType.viewOfRollback)}
                     language={language}
                     changeStateOfLottery={changeStateOfLottery}
                 ></OwnerContainer>
             }
 
             {/* here is were you can see your balanceOf Token  */}
-            {viewBalanceOf && isConnected
+
+            {viewOfModal === viewType.viewBalanceOf && isConnected
                 ? returnModalComponent(
-                    setViewBalanceOf,
+                    setViewOfModal,
+                    '',
                     text.yourBalance[language],
                     <div className="mrY10">
                         <h3 className="heading2">
@@ -238,9 +236,10 @@ export default function Container() {
                 : false}
 
             {/* here is were the user can subit a new ticket  */}
-            {viewSubmitTicket && isConnected
+            {viewOfModal === viewType.viewSubmitTickets && isConnected
                 ? returnModalComponent(
-                    setViewSubmitTicket,
+                    setViewOfModal,
+                    '',
                     text.chooseNumberToParticipate[language],
                     <ContainerModal lottery={lottery} provider={provider}
                         guilleCoin={guilleCoin} contStyle={styles}
@@ -249,17 +248,19 @@ export default function Container() {
                 : false}
 
             {/* here es were the user can see the winning number  */}
-            {viewOfWinner &&
+            {viewOfModal === viewType.viewOfWinner &&
                 returnModalComponent(
-                    setViewOfWinner,
+                    setViewOfModal,
+                    '',
                     text.viewWinner[language],
                     <p className="txtCenter"> {winningNumber} </p>
                 )
             }
 
-            {viewModalToSelectWinner &&
+            {viewOfModal === viewType.viewModalToChooseWinner &&
                 returnModalComponent(
-                    setViewModalToSelectWinner,
+                    setViewOfModal,
+                    '',
                     "Select Winner",
                     <Form className={"flx flxSpcBtw pd2em"}>
                         <div className="flx flxCol flxCenter">
@@ -281,9 +282,10 @@ export default function Container() {
                 )
             }
 
-            {viewOfRollback &&
+            {viewOfModal === viewType.viewOfRollback &&
                 returnModalComponent(
-                    setViewOfRollback,
+                    setViewOfModal,
+                    '',
                     text.beginningLottery[language],
                     <Form className={"flx flxCol pd2em"}>
 
@@ -323,7 +325,7 @@ export default function Container() {
                         </div>
 
                         <Input onClickCallback={() => {
-                            // roolOver()    
+                            roolOver()
                             console.log('XDDD');
                         }}
                             value={text.chooseWinner[language]}
