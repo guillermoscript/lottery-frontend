@@ -101,26 +101,33 @@ export default function Container() {
         console.log(newState);
     }
 
+    // this function run the set state of the modal view and the set state of the view of modal
     function setStateOfViewToTrue(setState, state) {
         return () => setState(state)
     }
 
+    // this function run the set state of the modal view and the set state of the view of modal
+    // and also runs a callback function
     function generalHandleModalClik(setState, state, callback) {
         return () => (setState(state), callback())
     }
 
+    // this function set the balance of the token to the store after the user click on the button
     async function handleClickOfBalance() {
         const balance = await getBalanceOfGuilleCoin(guilleCoin, account)
         setBalanceOf(balance)
         emitEvent(addBalanceOfToken({ balanceOf: balance }))
     }
 
+    // this function set the winning number to the state after the user click on the button
     async function hanldeViewOfWinnignNumber() {
         const number = await getWinningNumber(lottery)
         setWinningNumber(number)
         console.log(winningNumber);
     }
 
+    // this function set the Winning number to the state after the user enters the number
+    // and also validates that a four digit number is entered
     function handleChange(e) {
         let inputValue = e.target.value;
         if ((/^[0-9]*$/ig.test(inputValue) && (inputValue.length > 0 && inputValue.length < 5)) || inputValue === '') {
@@ -128,6 +135,7 @@ export default function Container() {
         }
     }
 
+    // this function sets the winning number
     async function selectWinnerNumber() {
         const lotterySigner = contractSigner(provider, lottery)
         // same as above only owner can change
@@ -135,6 +143,7 @@ export default function Container() {
         console.log(winningNumber);
     }
 
+    // this function starts a new lottery
     async function roolOver() {
         const lotterySigner = contractSigner(provider, lottery)
         // same as above only owner can change
@@ -142,6 +151,8 @@ export default function Container() {
         console.log(newLottery);
     }
 
+    // this is a general handle change function that will set the state 
+    // of the parameter of state passed and also test is pasess the test of the regular expression
     function generalHandleChange(e, regex, state) {
         let inputValue = e.target.value;
         if (regex.test(inputValue) || inputValue === '') {
@@ -170,6 +181,7 @@ export default function Container() {
         heading: <h2 className="heading2">{text.yourBalance[language]}</h2>,
     }
 
+    // it returns the view of the modal depending on the state of the modal
     function returnModalComponent(setState, state, headingText, children) {
         return <Modal
             modalContent={modal.modalContent}
